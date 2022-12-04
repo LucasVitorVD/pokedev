@@ -1,5 +1,5 @@
 <template>
-  <div class="container-app" v-cloak>
+  <div class="container-app" v-if="loading">
     <header>
       <b-navbar type="dark" variant="dark" fixed="top" class="navbar">
         <b-navbar-brand>
@@ -13,34 +13,50 @@
           </div>
         </b-navbar-brand>
         <b-nav-form>
-          <b-button size="sm" class="my-2 button-search" type="submit"
+          <b-button size="sm" class="my-2 button-search"
             ><b-icon-search></b-icon-search
           ></b-button>
           <b-form-input
             size="sm"
             class="input-search"
             placeholder="Search..."
+            v-model="search"
+            @input="searchPokemon()"
           ></b-form-input>
         </b-nav-form>
       </b-navbar>
     </header>
     <main class="mt-5">
-      <Pokemons />
+      <Pokemons :search="search" />
     </main>
   </div>
 </template>
 
 <script>
 import axios from "axios"
-import { BIconSearch } from "bootsrap-vue"
+import Pokemons from "../components/Pokemons"
+import mapState from "vuex"
+import { BIconSearch } from "bootstrap-vue"
 
 export default {
   name: 'index',
-  components: { BIconSearch },
+  components: { Pokemons, BIconSearch },
+  data() {
+    return {
+      loading: false,
+      search: ''
+    }
+  },
   mounted() {
     axios.get("https://pokeapi.co/api/v2/pokemon/?limit=150").then(response => {
-      this.$store.dispatch('getPokemons', response.data.results)
+      this.$store.dispatch('pokedev/getPokemons', response.data.results)
+      this.loading = true
     })
+  },
+  methods: {
+    searchPokemon() {
+      this.$store.commit("pokedev/searchPokemon", this.search.toLowerCase())
+    },
   }
 }
 </script>
@@ -50,10 +66,6 @@ export default {
 
 :root {
   --font: "Nunito", sans-serif;
-}
-
-.v-cloack {
-  display: none;
 }
 
 * {
