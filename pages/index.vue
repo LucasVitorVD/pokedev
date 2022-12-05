@@ -1,5 +1,5 @@
 <template>
-  <div class="container-app" v-if="loading">
+  <div class="container-app">
     <header>
       <b-navbar type="dark" variant="dark" fixed="top" class="navbar">
         <b-navbar-brand>
@@ -12,22 +12,17 @@
             <span class="navbar-brand">Pokedev</span>
           </div>
         </b-navbar-brand>
-        <b-nav-form>
-          <b-button size="sm" class="my-2 button-search"
-            ><b-icon-search></b-icon-search
-          ></b-button>
-          <b-form-input
+        <b-form-input
             size="sm"
             class="input-search"
             placeholder="Search..."
             v-model="search"
             @input="searchPokemon()"
           ></b-form-input>
-        </b-nav-form>
       </b-navbar>
     </header>
     <main class="mt-5">
-      <Pokemons :search="search" />
+      <Pokemons v-if="loading" :search="search" />
     </main>
   </div>
 </template>
@@ -44,13 +39,15 @@ export default {
   data() {
     return {
       loading: false,
-      search: ''
+      search: '',
     }
   },
   mounted() {
     axios.get("https://pokeapi.co/api/v2/pokemon/?limit=150").then(response => {
-      this.$store.dispatch('pokedev/getPokemons', response.data.results)
-      this.loading = true
+      if (response) {
+        this.$store.dispatch('pokedev/getPokemons', response.data.results)
+        this.loading = true
+      }
     })
   },
   methods: {
@@ -106,7 +103,8 @@ export default {
 }
 
 .input-search {
-  border-radius: 0px 5px 5px 0px;
+  border-radius: 5px;
+  width: 15.625rem;
 }
 
 .button-search {

@@ -1,13 +1,12 @@
 <template>
   <section class="pokemons-section container-fluid">
     <b-card
-      v-for="(pokemon, index) in pokemonFound"
+      v-for="(pokemon, index) of pokemonFound"
       :key="index"
       :title="pokemon.name.toUpperCase()"
-      :img-src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${get_id(
-        pokemon
-      )}.png`"
-      :img-alt="pokemon.name"
+      :img-src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
+        index + 1
+      }.png`"
       img-top
       tag="article"
       style="max-width: 15rem"
@@ -22,52 +21,51 @@
         @click.prevent.stop="showPokemonInfos(index)"
         class="btn btn-primary"
       >
-        Mais informações
+        More informations
       </b-button>
     </b-card>
     <b-modal id="modal-center" centered>
-      <div class="pokemonInfoCard">
-        <b-img
-          :src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonIndex}.png`"
-          alt="Image"
-          fluid
-        ></b-img>
-        <h2>{{ pokemons[pokemonIndex - 1].name.toUpperCase() }}</h2>
-        <b-badge variant="dark">Dark</b-badge>
-        <p>Descrição</p>
-      </div>
+      <PokemonInfos :pokemonData="pokemonData" :pokemonIndex="pokemonIndex" />
     </b-modal>
   </section>
 </template>
   
 <script>
-import mapState from "vuex";
+import mapState from "vuex"
+import PokemonInfos from "./PokemonInfos"
+import axios from "axios"
 
 export default {
   name: "Pokemons",
   props: ["search"],
+  components: { PokemonInfos },
   computed: {
     pokemons() {
       return this.$store.state.pokedev.pokemons;
     },
     pokemonFound() {
       return this.pokemons.filter((el) => {
-        return el.name.includes(this.search);
-      });
+        return el.name.includes(this.search)
+      })
     },
   },
   data() {
     return {
       pokemonIndex: 0,
-    };
+      pokemonData: []
+    }
   },
   methods: {
     showPokemonInfos(index) {
-      this.pokemonIndex = index + 1;
-    },
-    get_id(pokemon) {
-      return Number(pokemon.url.split("/")[6]);
-    },
+      this.pokemonIndex = index
+      axios
+        .get(`https://pokeapi.co/api/v2/pokemon/${index + 1}`)
+        .then((response) => {
+          if (response) {
+            this.pokemonData = response.data
+          }
+        })
+    }
   },
 };
 </script>

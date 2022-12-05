@@ -3,8 +3,8 @@ export const state = () => ({
 })
 
 export const mutations = {
-  getPokemons(state, pokemon) {
-    state.pokemons = pokemon
+  getPokemons(state, payload) {
+    state.pokemons = payload
   }
 }
 
