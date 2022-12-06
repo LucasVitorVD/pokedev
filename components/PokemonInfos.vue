@@ -2,30 +2,28 @@
   <div class="pokemonInfoCard">
     <div class="sectionInfos">
       <b-img
-        :src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${
-          pokemonIndex + 1
-        }.png`"
+        :src="`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonFullInfo.id}.png`"
         fluid
-        :alt="pokemonData.name"
+        :alt="pokemonFullInfo.name"
         class="pokemonImg"
       ></b-img>
       <div class="infos">
-          <h2 class="text-capitalize">{{ pokemonData.name }}</h2>
-          <b-badge
-            variant="dark"
-            class="mr-1 d-inline text-capitalize"
-            v-for="(type, index) in pokemonData.types"
-            :key="index"
-          >
-            {{ type.type.name }}
-          </b-badge>
+        <h2 class="text-capitalize">{{ pokemonFullInfo.name }}</h2>
+        <b-badge
+          variant="dark"
+          class="mr-1 d-inline text-capitalize"
+          v-for="(type, index) in pokemonFullInfo.types"
+          :key="index"
+        >
+          {{ type.type.name }}
+        </b-badge>
       </div>
     </div>
     <div class="movesList mt-1">
       <p class="h3 text-center">Moves</p>
       <b-list-group>
         <b-list-group-item
-          v-for="(move, index) in pokemonData.moves"
+          v-for="(move, index) in pokemonFullInfo.moves"
           :key="index"
         >
           {{ move.move.name }}
@@ -38,14 +36,14 @@
 <script>
 export default {
   name: "PokemonInfos",
-  props: ['pokemonData', 'pokemonIndex']
+  props: ["pokemonFullInfo"],
 }
 </script>
 
 <style scoped>
 .pokemonImg {
-    width: 150px;
-    height: 150px;
+  width: 9.375rem;
+  height: 9.375rem;
 }
 
 .pokemonInfoCard .sectionInfos {

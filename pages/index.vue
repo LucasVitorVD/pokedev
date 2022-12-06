@@ -17,7 +17,6 @@
             class="input-search"
             placeholder="Search..."
             v-model="search"
-            @input="searchPokemon()"
           ></b-form-input>
       </b-navbar>
     </header>
@@ -31,11 +30,10 @@
 import axios from "axios"
 import Pokemons from "../components/Pokemons"
 import mapState from "vuex"
-import { BIconSearch } from "bootstrap-vue"
 
 export default {
   name: 'index',
-  components: { Pokemons, BIconSearch },
+  components: { Pokemons },
   data() {
     return {
       loading: false,
@@ -49,11 +47,6 @@ export default {
         this.loading = true
       }
     })
-  },
-  methods: {
-    searchPokemon() {
-      this.$store.commit("pokedev/searchPokemon", this.search.toLowerCase())
-    },
   }
 }
 </script>
@@ -92,8 +85,8 @@ export default {
 }
 
 .navbar .header-icon {
-  width: 50px;
-  height: 50px;
+  width: 3.125rem;
+  height: 3.125rem;
 }
 
 .navbar .navbar-brand {
@@ -103,18 +96,18 @@ export default {
 }
 
 .input-search {
-  border-radius: 5px;
+  border-radius: 0.3125rem;
   width: 15.625rem;
 }
 
 .button-search {
-  border-radius: 5px 0px 0px 5px;
+  border-radius: 0.3125rem 0 0 0.3125rem;
 }
 
 #btn-back-to-top {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 1.25rem;
+  right: 1.25rem;
   display: none;
 }
 
