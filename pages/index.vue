@@ -1,5 +1,5 @@
 <template>
-  <div class="container-app">
+  <div class="container-app" v-if="loading">
     <header>
       <b-navbar type="dark" variant="dark" fixed="top" class="navbar">
         <b-navbar-brand>
@@ -12,43 +12,61 @@
             <span class="navbar-brand">Pokedev</span>
           </div>
         </b-navbar-brand>
-        <b-form-input
+
+        <div>
+          <span
+            class="input-group-text border-0 bg-transparent"
+            id="search-addon"
+          >
+            <b-icon-search variant="white"></b-icon-search>
+          </span>
+          <b-form-input
             size="sm"
             class="input-search"
             placeholder="Search..."
             v-model="search"
           ></b-form-input>
+        </div>
       </b-navbar>
     </header>
     <main class="mt-5">
-      <Pokemons v-if="loading" :search="search" />
+      <Pokemons :search="search" />
     </main>
+
+    <back-to-top bottom="50px" right="50px">
+      <b-button variant="outline-dark" class="btn-to-top">
+        <b-icon-chevron-compact-up></b-icon-chevron-compact-up>
+      </b-button>
+    </back-to-top>
   </div>
 </template>
 
 <script>
-import axios from "axios"
-import Pokemons from "../components/Pokemons"
-import mapState from "vuex"
+import axios from "axios";
+import Pokemons from "../components/Pokemons";
+import mapState from "vuex";
+import { BIconChevronCompactUp, BIconSearch } from "bootstrap-vue";
 
 export default {
-  name: 'index',
-  components: { Pokemons },
+  name: "index",
+  components: { Pokemons, BIconChevronCompactUp, BIconSearch },
   data() {
     return {
       loading: false,
-      search: '',
-    }
+      search: "",
+    };
   },
   mounted() {
-    axios.get("https://pokeapi.co/api/v2/pokemon/?limit=150").then(response => {
-      if (response) {
-        this.$store.dispatch('pokedev/getPokemons', response.data.results)
-        this.loading = true
-      }
-    })
-  }
-}
+    axios
+      .get("https://pokeapi.co/api/v2/pokemon/?limit=150")
+      .then((response) => {
+        if (response) {
+          this.$store.dispatch("pokedev/getPokemons", response.data.results);
+          this.loading = true;
+        }
+      });
+  },
+};
 </script>
 
 <style>
@@ -117,5 +135,14 @@ main {
   width: 100%;
   height: 100%;
   padding: 1rem;
+}
+
+.btn-to-top {
+  width: 3.75rem;
+  height: 3.75rem;
+  padding: 0.625rem 1rem;
+  border-radius: 50%;
+  font-size: 1.375rem;
+  line-height: 1.375rem;
 }
 </style>
